@@ -5,7 +5,8 @@ function [] = simulate_network_model(IT,pd,corstim,pick_dbs_freq)
 %corstim (cortical stimulation) - 0(off), 1(on)
 %pick_dbs_freq - choose appropriate DBS frequency
 
-rng shuffle
+%rng shuffle % obsolete in octave, see https://octave.sourceforge.io/octave/function/rand.html
+pkg load statistics % required for randsample, randperm
 
 n = 10;             % number of neurons in each nucleus
 tmax = 2000;       % ms
@@ -48,6 +49,8 @@ end
 % Run CTX-BG-TH Network Model
 [TH_APs STN_APs GPe_APs GPi_APs Striat_APs_indr Striat_APs_dr Cor_APs] = CTX_BG_TH_network(pd,corstim,tmax,dt,n,Idbs,Iappco);
 
+save 'simulate_network_model.mat'
+
 % Calculate GPi pathological low-frequency oscillatory power
 dt1=0.01*10^-3;
 params.Fs = 1/dt1; %Hz
@@ -55,17 +58,15 @@ params.fpass = [1 100];
 params.tapers = [3 5];
 params.trialave = 1;
 
-[gpi_alpha_beta_area gpi_S gpi_f]=make_Spectrum(GPi_APs,params);
+% [gpi_alpha_beta_area gpi_S gpi_f]=make_Spectrum(GPi_APs,params);
 
 % gpi_alpha_beta_area - GPi spectral power integrated in 7-35Hz band
 % gpi_S - GPi spectral power
 % gpi_f - GPi spectral frequencies
  
 
- name = [num2str(IT) 'pd' num2str(pattern) '.mat'];
- eval(['save ' name])
-
-
+ % name = [num2str(IT) 'pd' num2str(pattern) '.mat'];
+ % eval(['save ' name])
 
 quit
 
@@ -806,7 +807,7 @@ end
     z1bdot=uci-2/tau*Z1b-1/(tau^2)*S1b;
     Z1b=Z1b+dt*z1bdot;
 
-
+disp (i-1); fflush(stdout);
     end
 
     
