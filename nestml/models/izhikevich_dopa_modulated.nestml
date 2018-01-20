@@ -43,11 +43,11 @@ neuron izhikevich_dopa_modulated:
   initial_values:
     V_m mV = -65 mV # Membrane potential in mV
     U_m pA = 0 pA   # Membrane potential recovery variable
-    dopa nmol/l       # Dopamine concentration [0..1]
+    dopa nmol       # Dopamine concentration [0..1]
   end
 
   equations:
-    # synapses: alpha functions
+    # synapses: single exponentials
     shape I_shape_ampa = exp(-1/tau_ampa*t)
     shape I_shape_nmda = exp(-1/tau_nmda*t)
     shape I_shape_gaba = exp(-1/tau_gaba*t)
@@ -55,12 +55,12 @@ neuron izhikevich_dopa_modulated:
     function theta real = dopa / (K_d + dopa) # Dopamine receptor activation
 
     function B real = 1.0/(1.0+(0.28)*exp(-0.062*V_m/mV)) # NMDA magnesium block
-    function I_ampa nA = convolve(I_syn_ampa, spikesExc) * (V_ampa - V_m) * (1 - beta2 * theta)
-    function I_nmda nA = convolve(I_syn_nmda, spikesExc) * B * (V_nmda - V_m) * (1 + beta1 * theta)
-    function I_exc nA = nmda_ratio * I_nmda + (1-nmda_ratio) * I_gaba
-    function I_gaba nA = convolve(I_syn_gaba, spikesInh) * (V_m - V_gaba)
+    function I_ampa nA = convolve(I_shape_ampa, spikesExc) * (V_ampa - V_m) * (1 - beta2 * theta)
+    function I_nmda nA = convolve(I_shape_nmda, spikesExc) * B * (V_nmda - V_m) * (1 + beta1 * theta)
+    function I_exc nA = nmda_ratio * I_nmda + (1-nmda_ratio) * I_ampa
+    function I_gaba nA = convolve(I_shape_gaba, spikesInh) * (V_m - V_gaba)
 
-    function V_r_mod mV = V_r * (1 + K * theta)
+    function V_r_mod mV = V_r * (1 + Kappa * theta)
     function k_mod pF/mV/ms = k * (1 - alpha * theta)
 
     V_m' = ( k_mod * (V_m - V_r_mod) * (V_m - V_t) - U_m + I_e + I_exc + I_gaba ) / C_m
@@ -80,8 +80,8 @@ neuron izhikevich_dopa_modulated:
     I_e pA = 0. pA             # Constant input current in pA. (R=1)
     V_peak mV = 0. mV          # Spike detection threashold (reset condition)
     t_ref ms = 2.0 ms      # Refractory period
-    K real                     # D1-dependent hyperpolarisation factor (via KIR)
-    L real                     # D1-dependent hypersensitivity factor
+    Kappa real                     # D1-dependent hyperpolarisation factor (via KIR)
+    Lambda real                     # D1-dependent hypersensitivity factor
     beta1 real                 # D1-dependent NMDA upregulation
     alpha real                 # D2-dependent rheobase reduction
     beta2 real                 # D2-dependent AMPA downregulation
@@ -105,7 +105,7 @@ neuron izhikevich_dopa_modulated:
     spikesInh pA <- inhibitory spike
     spikesExc pA <- excitatory spike
     currents  <- current
-    spikesDopa <- spike
+    spikesDopa nmol <- spike
   end
 
   output: spike
@@ -118,7 +118,7 @@ neuron izhikevich_dopa_modulated:
       r -= 1
     elif V_m >= V_peak:
       V_m = c
-      U_m += d * (1 - L * theta)
+      U_m += d * (1 - Lambda * dopa / (K_d + dopa))
       emit_spike()
       r = RefractoryCounts
     end
