@@ -1,0 +1,128 @@
+/*
+Name: izhikevich_D1_modulated - Detailed Izhikevich neuron model with
+                                  dopamine modulation
+
+Description:
+Extension of the Izhikevich model to include dopamine modulation of excitability and
+of NMDA-receptor synaptic strength according to [1].
+The dynamics are given by the usual Izhikevich model:
+   C_m dV_m/dt = k (V-V_r)(V-V_t) - u + I + I_syn_ex + I_syn_in
+   dU_m/dt = a*(b*(V_m-V_r) - U_m)
+   ddopa/dt = ...
+
+   if v >= V_th:
+     V_m is set to c
+     U_m is incremented by d
+
+ The following parameters are dependent on dopamine concentration:
+   V_r = V_r_0 * (1 + K * dopa)
+   k = k_0 * (1 - alpha * dopa)
+   d = d_0 * (1 - L * dopa)
+   B1 = 1 + beta1 * dopa
+   B2 = 1 - beta2 * dopa
+
+References:
+[1] Humphries, Mark D., et al. "Capturing dopaminergic modulation and bimodal
+ membrane behaviour of striatal medium spiny neurons in accurate, reduced models."
+ Frontiers in computational neuroscience 3 (2009).
+
+Sends: SpikeEvent
+
+Receives: SpikeEvent, CurrentEvent, DataLoggingRequest
+FirstVersion: 2018
+Author: Felix B. Kern
+SeeAlso: izhikevitch_psc_alpha, iaf_psc_exp
+*/
+
+neuron izhikevich_dopa_modulated:
+
+  state:
+    r integer # number of steps in the current refractory phase
+  end
+
+  initial_values:
+    V_m mV = -65 mV # Membrane potential in mV
+    U_m pA = 0 pA   # Membrane potential recovery variable
+    dopa nmol/l       # Dopamine concentration [0..1]
+  end
+
+  equations:
+    # synapses: alpha functions
+    shape I_shape_ampa = exp(-1/tau_ampa*t)
+    shape I_shape_nmda = exp(-1/tau_nmda*t)
+    shape I_shape_gaba = exp(-1/tau_gaba*t)
+
+    function theta real = dopa / (K_d + dopa) # Dopamine receptor activation
+
+    function B real = 1.0/(1.0+(0.28)*exp(-0.062*V_m/mV)) # NMDA magnesium block
+    function I_ampa nA = convolve(I_syn_ampa, spikesExc) * (V_ampa - V_m) * (1 - beta2 * theta)
+    function I_nmda nA = convolve(I_syn_nmda, spikesExc) * B * (V_nmda - V_m) * (1 + beta1 * theta)
+    function I_exc nA = nmda_ratio * I_nmda + (1-nmda_ratio) * I_gaba
+    function I_gaba nA = convolve(I_syn_gaba, spikesInh) * (V_m - V_gaba)
+
+    function V_r_mod mV = V_r * (1 + K * theta)
+    function k_mod pF/mV/ms = k * (1 - alpha * theta)
+
+    V_m' = ( k_mod * (V_m - V_r_mod) * (V_m - V_t) - U_m + I_e + I_exc + I_gaba ) / C_m
+    U_m' = a * ( b*(V_m - V_r_mod) - U_m )
+    dopa' = -V_da / (K_m/dopa + 1) + spikesDopa
+  end
+
+  parameters:
+    C_m pF = 200. pF           # Membrane capacitance
+    k pF/mV/ms = 8. pF/mV/ms # Spiking slope
+    V_r mV = -65. mV           # resting potential
+    V_t mV = -45. mV           # threshold potential
+    a 1/ms = 0.01 /ms          # describes time scale of recovery variable
+    b nS = 9. nS               # sensitivity of recovery variable
+    c mV = -65 mV              # after-spike reset value of V_m
+    d pA = 60. pA              # after-spike reset value of U_m
+    I_e pA = 0. pA             # Constant input current in pA. (R=1)
+    V_peak mV = 0. mV          # Spike detection threashold (reset condition)
+    t_ref ms = 2.0 ms      # Refractory period
+    K real                     # D1-dependent hyperpolarisation factor (via KIR)
+    L real                     # D1-dependent hypersensitivity factor
+    beta1 real                 # D1-dependent NMDA upregulation
+    alpha real                 # D2-dependent rheobase reduction
+    beta2 real                 # D2-dependent AMPA downregulation
+    nmda_ratio real            # Ratio of NMDA:AMPA receptors at excitatory synapses
+    tau_ampa ms = 0.2 ms       # AMPA time constant
+    tau_nmda ms = 0.6 ms       # NMDA time constant
+    tau_gaba ms = 1.0 ms       # GABA time constant
+    V_ampa mV = 0.0 mV         # AMPA reversal potential
+    V_nmda mV = 0.0 mV         # NMDA reversal potential
+    V_gaba mV = -60 mV         # GABA reversal potential
+  end
+
+  internals:
+    RefractoryCounts integer = steps(t_ref) # refractory time in steps
+    K_m real = 0.16    # Dopamine saturation point (Kawagoe et al. 1992)
+    V_da real = 2.86   # Dopamine V_max (Kawagoe et al. 1992)
+    K_d real = 45.0    # Dopamine receptor dissociation coefficient (Richfield et al. 1989, approximate value for both D1 and D2)
+  end
+
+  input:
+    spikesInh pA <- inhibitory spike
+    spikesExc pA <- excitatory spike
+    currents  <- current
+    spikesDopa <- spike
+  end
+
+  output: spike
+
+  update:
+    integrate_odes()
+
+    # refractoriness and threshold crossing
+    if r > 0: # is refractory?
+      r -= 1
+    elif V_m >= V_peak:
+      V_m = c
+      U_m += d * (1 - L * theta)
+      emit_spike()
+      r = RefractoryCounts
+    end
+
+  end
+
+end
