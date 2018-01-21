@@ -1,0 +1,99 @@
+import nest
+import numpy as np
+import pylab
+
+nest.SetKernelStatus({"resolution":0.01})
+simulation_time = 1000.0
+
+nest.ResetKernel()
+
+nest.Install("models")
+
+D1_cell_params = {
+	'Kappa': 0.0289,
+	'Lambda': 0.331,
+	'alpha': 0.,
+	'beta1': 6.3,
+	'beta2': 0.,
+	'nmda_ratio': 0.5,
+	'V_gaba': -80.
+}
+
+D2_cell_params = {
+	'Kappa': 0.,
+	'Lambda': 0.,
+	'alpha': 0.032,
+	'beta1': 0.,
+	'beta2': 0.215,
+	'nmda_ratio': 0.5,
+	'V_gaba': -80.
+}
+
+probe_exc_spikegen_params = {
+	'spike_times': np.linspace(1, 1001, 26),
+	'spike_weights': [1.]*26
+}
+
+probe_inh_spikegen_params = {
+	'spike_times': np.linspace(21, 981, 25),
+	'spike_weights': [-1.]*25
+}
+
+dopa_spikes = [39., 59.] \
+	+ np.linspace(62,80,10).tolist() \
+	+ np.linspace(201,220,20).tolist() \
+	+ np.linspace(501,600,100).tolist()
+
+dopa_spikegen_params = {
+	'spike_times': dopa_spikes,
+	'spike_weights': np.ones(len(dopa_spikes)) * 45
+}
+
+syn_exc = {'receptor_type': 1}
+syn_inh = {'receptor_type': 2}
+syn_dopa = {'receptor_type': 3}
+
+D1_neuron = nest.Create( 'izhikevich_dopa_modulated', 1, params = D1_cell_params )
+D1_base = nest.Create( 'izhikevich_dopa_modulated', 1, params = D1_cell_params )
+D2_neuron = nest.Create( 'izhikevich_dopa_modulated', 1, params = D2_cell_params )
+D2_base = nest.Create( 'izhikevich_dopa_modulated', 1, params = D2_cell_params )
+
+probe_exc_spikegen = nest.Create('spike_generator', 1, params = probe_exc_spikegen_params)
+probe_inh_spikegen = nest.Create('spike_generator', 1, params = probe_inh_spikegen_params)
+nest.Connect(probe_exc_spikegen, D1_neuron, syn_spec = syn_exc)
+nest.Connect(probe_inh_spikegen, D1_neuron, syn_spec = syn_inh)
+nest.Connect(probe_exc_spikegen, D2_neuron, syn_spec = syn_exc)
+nest.Connect(probe_inh_spikegen, D2_neuron, syn_spec = syn_inh)
+
+dopa_spikegen = nest.Create('spike_generator', 1, params = dopa_spikegen_params)
+nest.Connect(dopa_spikegen, D1_neuron + D1_base + D2_neuron + D2_base, syn_spec = syn_dopa)
+
+multimeter = nest.Create( "multimeter" )
+nest.SetStatus( multimeter, { "withtime" : True, "record_from" : ["V_m"] })
+nest.Connect( multimeter, D1_neuron + D1_base + D2_neuron + D2_base )
+meter_shape = (999, 4)
+
+nest.Simulate( simulation_time )
+
+
+multimeter_events = nest.GetStatus( multimeter )[0]['events']
+voltages = np.reshape(multimeter_events["V_m"], meter_shape)
+times = np.reshape(multimeter_events["times"], meter_shape).T[0]
+voltages_nrnD1 = voltages.T[0]
+voltages_baseD1 = voltages.T[1]
+voltages_nrnD2 = voltages.T[2]
+voltages_baseD2 = voltages.T[3]
+epspsD1 = voltages_nrnD1 - voltages_baseD1
+epspsD2 = voltages_nrnD2 - voltages_baseD2
+
+pylab.subplot(2,1,1)
+pylab.plot( times, np.ones(len(times))*np.max(epspsD1[0:25]) )
+pylab.plot( times, np.ones(len(times))*np.min(epspsD1[0:25]) )
+pylab.plot( times, epspsD1 )
+pylab.plot( times, epspsD2 )
+
+pylab.subplot(2,1,2)
+pylab.plot( times, voltages_baseD1 )
+pylab.plot( times, voltages_baseD2 )
+
+pylab.show()

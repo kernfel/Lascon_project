@@ -55,10 +55,10 @@ neuron izhikevich_dopa_modulated:
     function theta real = dopa / (K_d + dopa) # Dopamine receptor activation
 
     function B real = 1.0/(1.0+(0.28)*exp(-0.062*V_m/mV)) # NMDA magnesium block
-    function I_ampa nA = convolve(I_shape_ampa, spikesExc) * (V_ampa - V_m) * (1 - beta2 * theta)
-    function I_nmda nA = convolve(I_shape_nmda, spikesExc) * B * (V_nmda - V_m) * (1 + beta1 * theta)
+    function I_ampa nA = convolve(I_shape_ampa, spikesAmpaNmda) * (V_ampa - V_m) * (1 - beta2 * theta)
+    function I_nmda nA = convolve(I_shape_nmda, spikesAmpaNmda) * B * (V_nmda - V_m) * (1 + beta1 * theta)
     function I_exc nA = nmda_ratio * I_nmda + (1-nmda_ratio) * I_ampa
-    function I_gaba nA = convolve(I_shape_gaba, spikesInh) * (V_m - V_gaba)
+    function I_gaba nA = convolve(I_shape_gaba, spikesGaba) * (V_m - V_gaba)
 
     function V_r_mod mV = V_r * (1 + Kappa * theta)
     function k_mod pF/mV/ms = k * (1 - alpha * theta)
@@ -102,10 +102,12 @@ neuron izhikevich_dopa_modulated:
   end
 
   input:
-    spikesInh pA <- inhibitory spike
-    spikesExc pA <- excitatory spike
-    currents  <- current
+    spikesAmpaNmda pA <- spike
+    spikesGaba pA <- spike
     spikesDopa nmol <- spike
+#    spikesInh pA <- inhibitory spike
+#    spikesExc pA <- excitatory spike
+    currents  <- current
   end
 
   output: spike
