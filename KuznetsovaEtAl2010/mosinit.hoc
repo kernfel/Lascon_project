@@ -1,0 +1,35 @@
+load_file("nrngui.hoc")
+
+xpanel("Kuznetsova et al. 2010")
+  xlabel("Select a simulation, then press Init & Run  ")
+  xbutton("Fig. 2a2","fig2a2()")
+  xbutton("Fig. 2b2","fig2b2()")
+  xbutton("Fig. 2f2","fig2f2()")
+  xbutton("Fig. 6a solid","fig6asolid()")
+  xbutton("Fig. 6a dashed","fig6adashed()")
+  xbutton("Quit","quit()")
+xpanel()
+
+proc fig2a2() {
+  load_file("Fig2a2.hoc")
+  load_file("run_and_graph.ses")
+}
+proc fig2b2() {
+  load_file("Fig2b2.hoc")
+  load_file("run_and_graph.ses")
+}
+proc fig2f2() {
+  load_file("Fig2f2.hoc")
+  load_file("run_and_graph.ses")
+}
+
+proc fig6asolid() {
+  load_file("Fig6a_solid_trace.hoc")
+  load_file("run_and_graph.ses")
+  Graph[0].view_size(0,1500, 3500, -80, 40)
+}
+proc fig6adashed() {
+  load_file("Fig6a_dashed-line_trace.hoc")
+  load_file("run_and_graph.ses")
+  Graph[0].view_size(0,1500, 3500, -80, 40)
+}
