@@ -80,8 +80,8 @@ neuron izhikevich_dopa_modulated:
     I_e pA = 0. pA             # Constant input current in pA. (R=1)
     V_peak mV = 0. mV          # Spike detection threashold (reset condition)
     t_ref ms = 2.0 ms      # Refractory period
-    Kappa real                     # D1-dependent hyperpolarisation factor (via KIR)
-    Lambda real                     # D1-dependent hypersensitivity factor
+    Kappa real                 # D1-dependent hyperpolarisation factor (via KIR)
+    Lambda real                # D1-dependent hypersensitivity factor
     beta1 real                 # D1-dependent NMDA upregulation
     alpha real                 # D2-dependent rheobase reduction
     beta2 real                 # D2-dependent AMPA downregulation
@@ -105,8 +105,6 @@ neuron izhikevich_dopa_modulated:
     spikesAmpaNmda pA <- spike
     spikesGaba pA <- spike
     spikesDopa nmol <- spike
-#    spikesInh pA <- inhibitory spike
-#    spikesExc pA <- excitatory spike
     currents  <- current
   end
 
