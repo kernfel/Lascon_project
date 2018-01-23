@@ -1,6 +1,6 @@
 /*
-Name: izhikevich_D1_modulated - Detailed Izhikevich neuron model with
-                                  dopamine modulation
+Name: izhikevich_D1_modulated_immediate - Detailed Izhikevich neuron model with
+              dopamine modulation applied immediately on Dx receptor activation
 
 Description:
 Extension of the Izhikevich model to include dopamine modulation of excitability and
@@ -34,7 +34,7 @@ Author: Felix B. Kern
 SeeAlso: izhikevitch_psc_alpha, iaf_psc_exp
 */
 
-neuron izhikevich_dopa_modulated:
+neuron izhikevich_dopa_modulated_immediate:
 
   state:
     r integer # number of steps in the current refractory phase
@@ -44,7 +44,6 @@ neuron izhikevich_dopa_modulated:
     V_m mV = -65 mV # Membrane potential in mV
     U_m pA = 0 pA   # Membrane potential recovery variable
     dopa nmol       # Dopamine concentration
-    theta real      # Dopamine effect variable [0..1]
   end
 
   equations:
@@ -53,7 +52,7 @@ neuron izhikevich_dopa_modulated:
     shape I_shape_nmda = exp(-1/tau_nmda*t)
     shape I_shape_gaba = exp(-1/tau_gaba*t)
 
-    function theta_inf real = dopa / (K_d + dopa) # Dopamine receptor activation
+    function theta real = dopa / (K_d + dopa) # Dopamine receptor activation
 
     function B real = 1.0/(1.0+(0.28)*exp(-0.062*V_m/mV)) # NMDA magnesium block
     function I_ampa nA = convolve(I_shape_ampa, spikesAmpaNmda) * (V_ampa - V_m) * (1 - beta2 * theta)
@@ -67,7 +66,6 @@ neuron izhikevich_dopa_modulated:
     V_m' = ( k_mod * (V_m - V_r_mod) * (V_m - V_t) - U_m + I_e + I_exc + I_gaba ) / C_m
     U_m' = a * ( b*(V_m - V_r_mod) - U_m )
     dopa' = -V_da / (K_m/dopa + 1) + spikesDopa
-    theta' = (theta_inf - theta) / tau_theta
   end
 
   parameters:
@@ -94,7 +92,6 @@ neuron izhikevich_dopa_modulated:
     V_ampa mV = 0.0 mV         # AMPA reversal potential
     V_nmda mV = 0.0 mV         # NMDA reversal potential
     V_gaba mV = -60 mV         # GABA reversal potential
-    tau_theta s = 10 s         # Dx intracellular cascade time scale
   end
 
   internals:

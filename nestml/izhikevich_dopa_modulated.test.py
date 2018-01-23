@@ -2,12 +2,17 @@ import nest
 import numpy as np
 import pylab
 
+# NOTE: setting theta currently only available via C++ hacking:
+# Find the functions `set_status` (2 blocks to add) and `get_status` (1 block to add) in <modelname>.h; add entries for theta
+
 nest.SetKernelStatus({"resolution":0.01})
 simulation_time = 1000.0
 
 nest.ResetKernel()
 
 nest.Install("models")
+model = 'izhikevich_dopa_modulated'
+#model = 'izhikevich_dopa_modulated_immediate'
 
 D1_cell_params = {
 	'Kappa': 0.0289,
@@ -16,7 +21,8 @@ D1_cell_params = {
 	'beta1': 6.3,
 	'beta2': 0.,
 	'nmda_ratio': 0.5,
-	'V_gaba': -80.
+	'V_gaba': -80.,
+	'theta': 0.5
 }
 
 D2_cell_params = {
@@ -26,7 +32,8 @@ D2_cell_params = {
 	'beta1': 0.,
 	'beta2': 0.215,
 	'nmda_ratio': 0.5,
-	'V_gaba': -80.
+	'V_gaba': -80.,
+	'theta': 0.5
 }
 
 probe_exc_spikegen_params = {
@@ -53,10 +60,10 @@ syn_exc = {'receptor_type': 1}
 syn_inh = {'receptor_type': 2}
 syn_dopa = {'receptor_type': 3}
 
-D1_neuron = nest.Create( 'izhikevich_dopa_modulated', 1, params = D1_cell_params )
-D1_base = nest.Create( 'izhikevich_dopa_modulated', 1, params = D1_cell_params )
-D2_neuron = nest.Create( 'izhikevich_dopa_modulated', 1, params = D2_cell_params )
-D2_base = nest.Create( 'izhikevich_dopa_modulated', 1, params = D2_cell_params )
+D1_neuron = nest.Create( model, 1, params = D1_cell_params )
+D1_base = nest.Create( model, 1, params = D1_cell_params )
+D2_neuron = nest.Create( model, 1, params = D2_cell_params )
+D2_base = nest.Create( model, 1, params = D2_cell_params )
 
 probe_exc_spikegen = nest.Create('spike_generator', 1, params = probe_exc_spikegen_params)
 probe_inh_spikegen = nest.Create('spike_generator', 1, params = probe_inh_spikegen_params)
