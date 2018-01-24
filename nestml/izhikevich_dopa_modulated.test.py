@@ -5,8 +5,8 @@ import pylab
 # NOTE: setting theta currently only available via C++ hacking:
 # Find the functions `set_status` (2 blocks to add) and `get_status` (1 block to add) in <modelname>.h; add entries for theta
 
-nest.SetKernelStatus({"resolution":0.01})
-simulation_time = 1000.0
+nest.SetKernelStatus({"resolution":0.1})
+simulation_time = 100000.0
 
 nest.ResetKernel()
 
@@ -36,14 +36,17 @@ D2_cell_params = {
 	'theta': 0.5
 }
 
+n_probe_spikes = 51 * int(simulation_time/1000)
+probe_spikes = [round(i) for i in np.linspace(1, int(simulation_time)+1, n_probe_spikes)]
+
 probe_exc_spikegen_params = {
-	'spike_times': np.linspace(1, 1001, 26),
-	'spike_weights': [1.]*26
+	'spike_times': probe_spikes[::2],
+	'spike_weights': [1.]*int(np.ceil(n_probe_spikes/2.))
 }
 
 probe_inh_spikegen_params = {
-	'spike_times': np.linspace(21, 981, 25),
-	'spike_weights': [-1.]*25
+	'spike_times': probe_spikes[1::2],
+	'spike_weights': [-1.]*int(np.floor(n_probe_spikes/2.))
 }
 
 dopa_spikes = [39., 59.] \
@@ -78,7 +81,7 @@ nest.Connect(dopa_spikegen, D1_neuron + D1_base + D2_neuron + D2_base, syn_spec 
 multimeter = nest.Create( "multimeter" )
 nest.SetStatus( multimeter, { "withtime" : True, "record_from" : ["V_m"] })
 nest.Connect( multimeter, D1_neuron + D1_base + D2_neuron + D2_base )
-meter_shape = (999, 4)
+meter_shape = (int(simulation_time)-1, 4)
 
 nest.Simulate( simulation_time )
 
@@ -94,13 +97,17 @@ epspsD1 = voltages_nrnD1 - voltages_baseD1
 epspsD2 = voltages_nrnD2 - voltages_baseD2
 
 pylab.subplot(2,1,1)
-pylab.plot( times, np.ones(len(times))*np.max(epspsD1[0:25]) )
-pylab.plot( times, np.ones(len(times))*np.min(epspsD1[0:25]) )
 pylab.plot( times, epspsD1 )
-pylab.plot( times, epspsD2 )
 
 pylab.subplot(2,1,2)
 pylab.plot( times, voltages_baseD1 )
+
+
+pylab.figure()
+pylab.subplot(2,1,1)
+pylab.plot( times, epspsD2 )
+
+pylab.subplot(2,1,2)
 pylab.plot( times, voltages_baseD2 )
 
 pylab.show()
