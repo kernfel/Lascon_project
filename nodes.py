@@ -1,4 +1,4 @@
-import nest
+''' Neuron model parameters '''
 
 cell_params = {}
 
@@ -10,7 +10,8 @@ cell_params['SNc'] = {'model': 'izhikevich', 'params':
 		'c': -60.,
 		'd': 50.,
 		'V_th': 10.
-	}
+	},
+	'n': 10
 }
 
 cell_params['MSN_D1'] = {'model': 'izhikevich_dopa_modulated', 'params':
@@ -31,7 +32,8 @@ cell_params['MSN_D1'] = {'model': 'izhikevich_dopa_modulated', 'params':
 
 		"beta1" :      0.5,
 		#"beta2" :      0.3
-	}
+	},
+	'n': 10
 }
 
 cell_params['MSN_D2'] = {'model': 'izhikevich_dopa_modulated', 'params':
@@ -52,7 +54,8 @@ cell_params['MSN_D2'] = {'model': 'izhikevich_dopa_modulated', 'params':
 
 		#"beta1" :      0.5,
 		"beta2" :      0.3
-	}
+	},
+	'n': 10
 }
 
 cell_params['STN'] = {'model': 'izhikevich', 'params':
@@ -62,7 +65,8 @@ cell_params['STN'] = {'model': 'izhikevich', 'params':
 		'c': -65.,
 		'd': 1.5,
 		'I_e': 30.
-	}
+	},
+	'n': 10
 }
 
 cell_params['GPe'] = {'model': 'izhikevich', 'params':
@@ -72,7 +76,8 @@ cell_params['GPe'] = {'model': 'izhikevich', 'params':
 		'c': -65.,
 		'd': 2.,
 		'I_e': 10.
-	}
+	},
+	'n': 10
 }
 
 cell_params['GPi'] = {'model': 'izhikevich', 'params':
@@ -82,7 +87,8 @@ cell_params['GPi'] = {'model': 'izhikevich', 'params':
 		'c': -65.,
 		'd': 2.,
 		'I_e': 10.
-	}
+	},
+	'n': 10
 }
 
 cell_params['Pyr'] = {'model': 'izhikevich', 'params':
@@ -91,7 +97,8 @@ cell_params['Pyr'] = {'model': 'izhikevich', 'params':
 		'b': .2,
 		'c': -65.,
 		'd': 8.
-	}
+	},
+	'n': 10
 }
 
 cell_params['FSI'] = {'model': 'izhikevich', 'params':
@@ -100,7 +107,8 @@ cell_params['FSI'] = {'model': 'izhikevich', 'params':
 		'b': .2,
 		'c': -65.,
 		'd': 2.
-	}
+	},
+	'n': 10
 }
 
 cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
@@ -114,5 +122,6 @@ cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
 		'b': 15,
 		'c': -60.,
 		'd': 10.
-	}
+	},
+	'n': 10
 }
