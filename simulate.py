@@ -21,7 +21,7 @@ cell_params = nodes.cell_params
 #for pa in cell_params.values():
 #	pa['n'] = 50
 pop = network.create_populations(cell_params)
-network.create_network(pop, w = 1)
+network.create_network(pop)
 
 spikes = {}
 voltages = {}
