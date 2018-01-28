@@ -92,7 +92,7 @@ cell_params['STN'] = {'model': 'izhikevich', 'params':
 		'b': .265,
 		'c': -65.,
 		'd': 1.5,
-		'I_e': 30.
+		'I_e': 10. # 20.
 	},
 	'n': 10
 }
@@ -103,7 +103,7 @@ cell_params['GPe'] = {'model': 'izhikevich', 'params':
 		'b': .2,
 		'c': -65.,
 		'd': 2.,
-		'I_e': 10.
+		'I_e': 5. # 10.
 	},
 	'n': 10
 }
@@ -114,7 +114,7 @@ cell_params['GPi'] = {'model': 'izhikevich', 'params':
 		'b': .2,
 		'c': -65.,
 		'd': 2.,
-		'I_e': 10.
+		'I_e': 5. # 10.
 	},
 	'n': 10
 }
@@ -149,7 +149,8 @@ cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
 		'a': .1,
 		'b': 15.,
 		'c': -60.,
-		'd': 10.
+		'd': 10.,
+		'I_e': 147. # 0.
 	},
 	'n': 10
 }
