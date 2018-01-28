@@ -1,4 +1,4 @@
-function [vgi] = simulate_GPi(dt, tmax, Iinj)
+function [vgi, vsngi, vgegi, vstrgi] = simulate_GPi(dt, tmax, Iinj)
   n = 1;
 
   t=0:dt:tmax;
@@ -15,6 +15,9 @@ function [vgi] = simulate_GPi(dt, tmax, Iinj)
   p=get_params(n);
 
   vgi=zeros(n,length(t)); % line 156
+  vsngi = zeros(n,length(t));
+  vgegi = zeros(n,length(t));
+  vstrgi = zeros(n,length(t));
 
   vgi(:,1)=v4; % line 170
   
@@ -51,6 +54,10 @@ function [vgi] = simulate_GPi(dt, tmax, Iinj)
     Igigi=0; %ggigi*((V4-Esyn(5)).*(S31b+S32b)); 
     Istrgpi=0; %gstrgpi*(V4-Esyn(6)).*(S9+S91+S92+S93+S94+S95+S96+S97+S98+S99);
     Iappgpi=0; %3;
+    
+    vsngi(:,i) = dt/p.Cm * .43 * .15 * V4;
+    vgegi(:,i) = dt/p.Cm * .5 * .3 * (V4 + 85);
+    vstrgi(:,i) = dt/p.Cm * .5 * .3 * (V4 + 85);
     
     % Lines 684ff
     vgi(:,i)=V4+dt*(1/p.Cm*(-Il4-Ik4-Ina4-It4-Ica4-Iahp4-Isngi-Igigi-Istrgpi+Iappgpi+Iinj(i)));

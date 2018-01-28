@@ -1,4 +1,4 @@
-function [vsn] = simulate_STN(dt, tmax, Iinj)
+function [vsn, vgesn, vctxsn] = simulate_STN(dt, tmax, Iinj)
   n = 1;
 
   t=0:dt:tmax;
@@ -11,6 +11,8 @@ function [vsn] = simulate_STN(dt, tmax, Iinj)
   Idbs = zeros(size(t));
 
   v2=-62+randn(n,1)*5; % line 103
+  vgesn = zeros(n,size(t));
+  vctxsn = zeros(n,size(t));
 
   p=get_params(n);
   CAsn2=0.005*ones(n,1);
@@ -73,6 +75,9 @@ function [vsn] = simulate_STN(dt, tmax, Iinj)
     Igesn=0; %(ggesn*((V2-Esyn(1)).*(S3a+S31a))); 
     Icorsnampa=0; %gcorsna.*(V2-Esyn(2)).*(S6b+S61b);
     Icorsnnmda=0; %gcorsnn.*(V2-Esyn(2)).*(S6bn+S61bn);
+    
+    vgesn(:,i) = dt/p.Cm * .5 * .3 * (V2+85);
+    vctxsn(:,i) = dt/p.Cm * .43 * (.003 + .15) * V2;
     
     % Lines 623ff
     vsn(:,i)=V2+dt*(1/p.Cm*(-Ina2-Ik2-Ia2-IL2-It2-Icak2-Il2-Igesn-Icorsnampa-Icorsnnmda+Idbs(i)+Iinj(i))); %STN-DBS

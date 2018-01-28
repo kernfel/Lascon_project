@@ -1,4 +1,4 @@
-function [vth] = simulate_th(dt, tmax, Iinj)
+function [vth, vgith] = simulate_th(dt, tmax, Iinj)
   n = 1;
 
   t=0:dt:tmax;
@@ -13,6 +13,7 @@ function [vth] = simulate_th(dt, tmax, Iinj)
   p=get_params(n);
 
   vth=zeros(n,length(t)); % line 153
+  vgith = zeros(n,length(t));
 
   vth(:,1)=v1; % line 167
   
@@ -39,6 +40,9 @@ function [vth] = simulate_th(dt, tmax, Iinj)
     It1=p.gt(1)*(p1.^2).*R1.*(V1-p.Et);
     Igith=0; %igith=ggith*(V1-Esyn(6)).*(S4); % GPi -> Thalamus synapse
     Iappth=1.2;
+    
+    % Synapse voltage impacts
+    vgith(:,i) = dt/p.Cm * 0.112 * 0.3 * (V1 + 85);
     
     % Lines 600ff
     vth(:,i)= V1+dt*(1/p.Cm*(-Il1-Ik1-Ina1-It1-Igith+Iappth+Iinj(i)));

@@ -1,4 +1,4 @@
-function [vge] = simulate_GPe(dt, tmax, Iinj)
+function [vge, vsnge, vgege, vstrge] = simulate_GPe(dt, tmax, Iinj)
   n = 1;
 
   t=0:dt:tmax;
@@ -15,6 +15,9 @@ function [vge] = simulate_GPe(dt, tmax, Iinj)
   p=get_params(n);
 
   vge=zeros(n,length(t)); % line 155
+  vsnge=zeros(n,length(t));
+  vgege=zeros(n,length(t));
+  vstrge=zeros(n,length(t));
 
   vge(:,1)=v3; % line 169
   
@@ -52,6 +55,10 @@ function [vge] = simulate_GPe(dt, tmax, Iinj)
     Igege=0; %(0.25*(pd*3+1))*(ggege).*((V3-Esyn(3)).*(S31c+S32c)); 
     Istrgpe=0; %gstrgpe*(V3-Esyn(6)).*(S5+S51+S52+S53+S54+S55+S56+S57+S58+S59);
     Iappgpe=0; %3-2*corstim*~pd; %Modulation only during cortical stim to maintain mean firing rate
+    
+    vsnge(:,i) = dt/p.Cm * .43 * (.001 + .15)*V3;
+    vgege(:,i) = dt/p.Cm * 0.3 * 0.5 * (V3 + 85);
+    vstrge(:,i) = dt/p.Cm * 0.3 * 0.5 * (V3 + 85);
     
     % Lines 658ff
     vge(:,i)=V3+dt*(1/p.Cm*(-Il3-Ik3-Ina3-It3-Ica3-Iahp3-Isngeampa-Isngenmda-Igege-Istrgpe+Iappgpe+Iinj(i)));
