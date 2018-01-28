@@ -22,35 +22,15 @@ cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
 pop = network.create_populations(cell_params, scale = 1)
 network.create_network(pop)
 
-spikes = {}
-voltages = {}
-for key in pop:
-	spikes[key] = nest.Create('spike_detector')
-	nest.SetStatus(spikes[key], [{'withtime': True,
-                          'withgid': True,
-                          'to_file': False}])
-	nest.Connect(pop[key], spikes[key])
-
-	voltages[key] = nest.Create('voltmeter')
-	nest.SetStatus(voltages[key], {'withgid': True, 'withtime': True})
-	nest.Connect(voltages[key], pop[key])
-
-thetameter = nest.Create('multimeter')
-nest.SetStatus(thetameter, {'withtime': True, 'record_from': ['theta']})
-nest.Connect(thetameter, [pop['MSN_D1'][0]])
+spikes, voltages, thetameter = setup_recordings(pop)
 
 
 
 nest.Simulate(simtime)
 
-#for key in voltages:
-#	nest.voltage_trace.from_device(voltages[key])
-#pl.figure()
+#plot_raster(pop, spikes, simtime)
 
-raster(pop, spikes, simtime)
-
-#pl.figure()
-#thetaEvents = nest.GetStatus(thetameter)[0]['events']
-#pl.plot(thetaEvents['times'], thetaEvents['theta'])
+pl.figure()
+plot_theta(pop, thetameter)
 
 pl.show()
