@@ -119,7 +119,7 @@ cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
 		'V_t': -50.,
 		'V_peak': 40.,
 		'a': .1,
-		'b': 15,
+		'b': 15.,
 		'c': -60.,
 		'd': 10.
 	},
