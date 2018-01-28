@@ -31,7 +31,21 @@ cell_params['MSN_D1'] = {'model': 'izhikevich_dopa_modulated', 'params':
 		#"alpha" :      0.032,
 
 		"beta1" :      0.5,
-		#"beta2" :      0.3
+		#"beta2" :      0.3,
+
+		# Values from Kumaravelu:
+		"V_gaba" : -80.,
+		"tau_gaba": 13.,
+		'nmda_ratio': 0.5,
+		'tau_ampa': 3.0,
+		'tau_nmda': 30.
+
+		# Values from Fountas & Shanahan:
+#		"V_gaba" : -60.,
+#		"tau_gaba": 4.,
+#		'nmda_ratio': 0.33,
+#		'tau_ampa': 6.0,
+#		'tau_nmda': 160.
 	},
 	'n': 10
 }
@@ -53,7 +67,21 @@ cell_params['MSN_D2'] = {'model': 'izhikevich_dopa_modulated', 'params':
 		"alpha" :      0.032,
 
 		#"beta1" :      0.5,
-		"beta2" :      0.3
+		"beta2" :      0.3,
+
+		# Values from Kumaravelu:
+		"V_gaba" : -80.,
+		"tau_gaba": 13.,
+		'nmda_ratio': 0.5,
+		'tau_ampa': 3.0,
+		'tau_nmda': 30.
+
+		# Values from Fountas & Shanahan:
+#		"V_gaba" : -60.,
+#		"tau_gaba": 4.,
+#		'nmda_ratio': 0.33,
+#		'tau_ampa': 6.0,
+#		'tau_nmda': 160.
 	},
 	'n': 10
 }
