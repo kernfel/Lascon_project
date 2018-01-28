@@ -129,12 +129,13 @@ cell_params['Pyr'] = {'model': 'izhikevich', 'params':
 	'n': 10
 }
 
-cell_params['FSI'] = {'model': 'izhikevich', 'params':
+cell_params['Inh'] = {'model': 'izhikevich', 'params':
 	{# Source: Kumaravelu et al. 2016
 		'a': .1,
 		'b': .2,
 		'c': -65.,
-		'd': 2.
+		'd': 2.,
+		'I_e': 2. # Tuned
 	},
 	'n': 10
 }
@@ -150,7 +151,7 @@ cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
 		'b': 15.,
 		'c': -60.,
 		'd': 10.,
-		't_ref': 1.,
+		't_ref': 1., # Tuned
 		'I_e': 147. # 0.
 	},
 	'n': 10

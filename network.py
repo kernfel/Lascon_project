@@ -15,21 +15,21 @@ def create_populations(cell_params):
 def create_network(pop, w = 1, wdopa = 150):
 	nest.Connect(
 		pop['Thal'], pop['Pyr'],
-		syn_spec = {'weight': 0.05*w, 'delay': 5.6},
+		syn_spec = {'weight': 0.5*w, 'delay': 5.6},
 		conn_spec = {'rule': 'one_to_one'}
 	)
 	nest.Connect(
-		pop['FSI'], pop['Pyr'],
-		syn_spec = {'weight': -.01*w, 'delay': 0.1},
+		pop['Inh'], pop['Pyr'],
+		syn_spec = {'weight': -10.*w, 'delay': 0.1},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 4}
 	)
 	PyrInput = nest.Create('poisson_generator')
-	nest.SetStatus(PyrInput, {'rate': 120.})
-	nest.Connect(PyrInput, pop['Pyr'], syn_spec={'weight': 20.})
+	nest.SetStatus(PyrInput, {'rate': 60.})
+	nest.Connect(PyrInput, pop['Pyr'], syn_spec={'weight': 10.})
 
 	nest.Connect(
-		pop['Pyr'], pop['FSI'],
-		syn_spec = {'weight': .03*w, 'delay': 0.1},
+		pop['Pyr'], pop['Inh'],
+		syn_spec = {'weight': 10.*w, 'delay': 0.1},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 4}
 	)
 
