@@ -55,8 +55,8 @@ neuron izhikevich_dopa_modulated_immediate:
     function theta real = dopa / (K_d + dopa) # Dopamine receptor activation
 
     function B real = 1.0/(1.0+(0.28)*exp(-0.062*V_m/mV)) # NMDA magnesium block
-    function I_ampa nA = convolve(I_shape_ampa, spikesAmpaNmda) * (V_ampa - V_m) * (1 - beta2 * theta)
-    function I_nmda nA = convolve(I_shape_nmda, spikesAmpaNmda) * B * (V_nmda - V_m) * (1 + beta1 * theta)
+    function I_ampa nA = convolve(I_shape_ampa, spikesGlu) * (V_ampa - V_m) * (1 - beta2 * theta)
+    function I_nmda nA = convolve(I_shape_nmda, spikesGlu) * B * (V_nmda - V_m) * (1 + beta1 * theta)
     function I_exc nA = nmda_ratio * I_nmda + (1-nmda_ratio) * I_ampa
     function I_gaba nA = convolve(I_shape_gaba, spikesGaba) * (V_m - V_gaba)
 
@@ -96,13 +96,13 @@ neuron izhikevich_dopa_modulated_immediate:
 
   internals:
     RefractoryCounts integer = steps(t_ref) # refractory time in steps
-    K_m real = 0.16    # Dopamine saturation point (Kawagoe et al. 1992)
-    V_da real = 2.86   # Dopamine V_max (Kawagoe et al. 1992)
-    K_d real = 45.0    # Dopamine receptor dissociation coefficient (Richfield et al. 1989, approximate value for both D1 and D2)
+    K_m nmol = 160 nmol        # Dopamine saturation point (Kawagoe et al. 1992)
+    V_da nmol/s = 2860 nmol/s  # Dopamine V_max (Kawagoe et al. 1992)
+    K_d real = 45.0            # Dopamine receptor dissociation coefficient (Richfield et al. 1989, approximate value for both D1 and D2)
   end
 
   input:
-    spikesAmpaNmda pA <- spike
+    spikesGlu pA <- spike
     spikesGaba pA <- spike
     spikesDopa nmol <- spike
     currents  <- current
