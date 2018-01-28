@@ -1,0 +1,166 @@
+Common subdirectories: build/CMakeFiles and build-backup/CMakeFiles
+Common subdirectories: build/doc and build-backup/doc
+diff '--context=2' build/izhikevich_dopa_modulated.h build-backup/izhikevich_dopa_modulated.h
+*** build/izhikevich_dopa_modulated.h	2018-01-27 20:14:05.763503295 +0000
+--- build-backup/izhikevich_dopa_modulated.h	2018-01-27 20:08:13.313475488 +0000
+***************
+*** 1070,1073 ****
+--- 1070,1078 ----
+    def< long >(__d, "r", get_r());
+  
++   def< double >(__d, "V_m", get_V_m());
++   def< double >(__d, "U_m", get_U_m());
++   def< double >(__d, "dopa", get_dopa());
++   def< double >(__d, "theta", get_theta());
++ 
+  
+  
+***************
+*** 1191,1194 ****
+--- 1196,1212 ----
+    updateValue<long>(__d, "r", tmp_r);
+  
++   
++   double tmp_V_m = get_V_m();
++   updateValue<double>(__d, "V_m", tmp_V_m);
++ 
++   double tmp_U_m = get_U_m();
++   updateValue<double>(__d, "U_m", tmp_U_m);
++ 
++   double tmp_dopa = get_dopa();
++   updateValue<double>(__d, "dopa", tmp_dopa);
++ 
++   double tmp_theta = get_theta();
++   updateValue<double>(__d, "theta", tmp_theta);
++ 
+  
+    // We now know that (ptmp, stmp) are consistent. We do not
+***************
+*** 1275,1278 ****
+--- 1293,1301 ----
+    set_r(tmp_r);
+  
++   set_V_m(tmp_V_m);
++   set_U_m(tmp_U_m);
++   set_dopa(tmp_dopa);
++   set_theta(tmp_theta);
++ 
+  
+    updateValue< double >(__d, nest::names::gsl_error_tol, P_.__gsl_error_tol);
+diff '--context=2' build/izhikevich_dopa_modulated_immediate.h build-backup/izhikevich_dopa_modulated_immediate.h
+*** build/izhikevich_dopa_modulated_immediate.h	2018-01-27 20:14:10.843590110 +0000
+--- build-backup/izhikevich_dopa_modulated_immediate.h	2018-01-27 20:08:13.313475488 +0000
+***************
+*** 1040,1043 ****
+--- 1040,1048 ----
+  
+  
++   def< double >(__d, "V_m", get_V_m());
++   def< double >(__d, "U_m", get_U_m());
++   def< double >(__d, "dopa", get_dopa());
++ 
++ 
+  
+      DictionaryDatum __receptor_type = new Dictionary();
+***************
+*** 1156,1159 ****
+--- 1161,1174 ----
+    updateValue<long>(__d, "r", tmp_r);
+  
++   
++   double tmp_V_m = get_V_m();
++   updateValue<double>(__d, "V_m", tmp_V_m);
++ 
++   double tmp_U_m = get_U_m();
++   updateValue<double>(__d, "U_m", tmp_U_m);
++ 
++   double tmp_dopa = get_dopa();
++   updateValue<double>(__d, "dopa", tmp_dopa);
++ 
+  
+    // We now know that (ptmp, stmp) are consistent. We do not
+***************
+*** 1237,1240 ****
+--- 1252,1259 ----
+    set_r(tmp_r);
+  
++   set_V_m(tmp_V_m);
++   set_U_m(tmp_U_m);
++   set_dopa(tmp_dopa);
++ 
+  
+    updateValue< double >(__d, nest::names::gsl_error_tol, P_.__gsl_error_tol);
+diff '--context=2' build/izhikevich_psc_alpha.h build-backup/izhikevich_psc_alpha.h
+*** build/izhikevich_psc_alpha.h	2018-01-27 20:14:09.995575619 +0000
+--- build-backup/izhikevich_psc_alpha.h	2018-01-27 20:08:13.309475420 +0000
+***************
+*** 748,751 ****
+--- 748,754 ----
+    def< long >(__d, "r", get_r());
+  
++   def< double >(__d, "V_m", get_V_m());
++   def< double >(__d, "U_m", get_U_m());
++ 
+  
+  
+***************
+*** 819,822 ****
+--- 822,832 ----
+    updateValue<long>(__d, "r", tmp_r);
+  
++   
++   double tmp_V_m = get_V_m();
++   updateValue<double>(__d, "V_m", tmp_V_m);
++ 
++   double tmp_U_m = get_U_m();
++   updateValue<double>(__d, "U_m", tmp_U_m);
++ 
+  
+    // We now know that (ptmp, stmp) are consistent. We do not
+***************
+*** 870,873 ****
+--- 880,886 ----
+    set_r(tmp_r);
+  
++   set_V_m(tmp_V_m);
++   set_U_m(tmp_U_m);
++ 
+  
+    updateValue< double >(__d, nest::names::gsl_error_tol, P_.__gsl_error_tol);
+diff '--context=2' build/izhikevich_psc_alpha_implicit.h build-backup/izhikevich_psc_alpha_implicit.h
+*** build/izhikevich_psc_alpha_implicit.h	2018-01-27 20:14:10.235579720 +0000
+--- build-backup/izhikevich_psc_alpha_implicit.h	2018-01-27 20:08:13.281474941 +0000
+***************
+*** 752,755 ****
+--- 752,758 ----
+    def< long >(__d, "r", get_r());
+  
++   def< double >(__d, "V_m", get_V_m());
++   def< double >(__d, "U_m", get_U_m());
++ 
+  
+  
+***************
+*** 823,826 ****
+--- 826,836 ----
+    updateValue<long>(__d, "r", tmp_r);
+  
++   
++   double tmp_V_m = get_V_m();
++   updateValue<double>(__d, "V_m", tmp_V_m);
++ 
++   double tmp_U_m = get_U_m();
++   updateValue<double>(__d, "U_m", tmp_U_m);
++ 
+  
+    // We now know that (ptmp, stmp) are consistent. We do not
+***************
+*** 874,877 ****
+--- 884,890 ----
+    set_r(tmp_r);
+  
++   set_V_m(tmp_V_m);
++   set_U_m(tmp_U_m);
++ 
+  
+    updateValue< double >(__d, nest::names::gsl_error_tol, P_.__gsl_error_tol);
