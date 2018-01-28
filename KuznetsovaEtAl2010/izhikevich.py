@@ -27,7 +27,7 @@ for (i,p) in enumerate(ps):
 	nest.SetStatus([n[0] + i + j*nProbe for j in range(nStim)], {'I_e': p})
 
 stim = [nest.Create('step_current_generator',
-	params = {'amplitude_times': [2000., 6000.], 'amplitude_values': [i, 0.]}) for i in [-20., 20., 100.]]
+	params = {'amplitude_times': [2000., 6000.], 'amplitude_values': [i, 0.]}) for i in [-10., 50., 400.]]
 for i in range(nStim):
 	nest.Connect(stim[i], range(n[0] + i*nProbe, n[0] + (i+1)*nProbe))
 
