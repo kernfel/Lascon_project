@@ -118,7 +118,7 @@ cell_params['GPi'] = {'model': 'izhikevich', 'params':
 		'b': .2,
 		'c': -65.,
 		'd': 2.,
-		'I_e': 5. # 10.
+		'I_e': 4.6 # 10.
 	},
 	'n': 10
 }

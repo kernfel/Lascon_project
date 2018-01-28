@@ -88,24 +88,24 @@ def create_network(pop, w = 1, wdopa = 150):
 
 	nest.Connect(
 		pop['GPe'], pop['GPi'],
-		syn_spec = {'weight': -.03*w, 'delay': 3.0},
+		syn_spec = {'weight': -5.*w, 'delay': 3.0},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 	nest.Connect(
 		pop['MSN_D1'], pop['GPi'],
-		syn_spec = {'weight': -.03*w, 'delay': 4.0},
+		syn_spec = {'weight': -5.*w, 'delay': 4.0},
 		conn_spec = {'rule': 'all_to_all'}
 	)
 	nest.Connect(
 		pop['STN'], pop['GPi'][::2],
-		syn_spec = {'weight': .04*w, 'delay': 1.5},
+		syn_spec = {'weight': 15.*w, 'delay': 1.5},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 
 	nest.Connect(
 		pop['GPi'], pop['Thal'],
 		syn_spec = {'weight': -10.*w, 'delay': 5.0},
-		conn_spec = {'rule': 'one_to_one'}
+		conn_spec = {'rule': 'fixed_indegree', 'indegree': 1} #'one_to_one'}
 	)
 	ThalInput = nest.Create('poisson_generator')
 	nest.SetStatus(ThalInput, {'rate': 60.})
