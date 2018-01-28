@@ -1,2 +1,4 @@
 nestml/build/*
 KuznetsovaEtAl2010/x86_64/
+*.pyc
+*octave-workspace
