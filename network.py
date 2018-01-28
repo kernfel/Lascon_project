@@ -1,12 +1,12 @@
 import nest
 from numpy.random import uniform, normal
 
-def create_populations(cell_params):
+def create_populations(cell_params, scale = 1):
 	nest.Install('models')
 	populations = {}
 	for pop_name in cell_params:
 		p = cell_params[pop_name]
-		populations[pop_name] = nest.Create(p['model'], p['n'], params = p['params'])
+		populations[pop_name] = nest.Create(p['model'], scale * p['n'], params = p['params'])
 		i_e = nest.GetStatus(populations[pop_name])[0]['I_e']
 		for i in populations[pop_name]:
 			nest.SetStatus([i], {'V_m': uniform(-100., -40.), 'U_m': uniform(0.,1.), 'I_e': i_e + normal()})

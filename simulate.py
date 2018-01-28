@@ -18,9 +18,7 @@ nest.SetKernelStatus({
 
 cell_params = nodes.cell_params
 #cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
-#for pa in cell_params.values():
-#	pa['n'] = 50
-pop = network.create_populations(cell_params)
+pop = network.create_populations(cell_params, scale = 1)
 network.create_network(pop)
 
 spikes = {}
