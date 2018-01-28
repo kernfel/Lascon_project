@@ -6,7 +6,7 @@ import nest.voltage_trace
 import pylab as pl
 
 # simulation parameters
-simtime = 10000.            # simulation time (ms)
+simtime = 2000.            # simulation time (ms)
 dt = 0.1                   # simulation resolution (ms)
 
 nest.ResetKernel()
@@ -44,16 +44,25 @@ for key in pop:
 
 nest.Simulate(simtime)
 
-
 #for key in voltages:
 #	nest.voltage_trace.from_device(voltages[key])
+#pl.figure()
 
-rasters = pop.keys()#['MSN_D1', 'MSN_D2', 'Pyr']
+k = 0;
 for key in pop:
+	k = k+1
+	senders = nest.GetStatus(spikes[key], 'events')[0]['senders'] - pop[key][0]
+	times = nest.GetStatus(spikes[key], 'events')[0]['times']
+	pl.subplot(len(pop), 1, k)
+	pl.scatter(times, senders, marker='.')
+	pl.xlim([0,simtime])
+	pl.ylim([0,len(pop[key])])
+	pl.ylabel(key)
+
 	rate = nest.GetStatus(spikes[key], 'n_events')[0] / (simtime/1000. * len(pop[key]))
 	print key, rate
-	if rate > 0 and key in rasters:
-		nest.raster_plot.from_device(spikes[key], title=key)
+#	if rate > 0 and key in rasters:
+#		nest.raster_plot.from_device(spikes[key], title=key)
 
 #thetaEvents = nest.GetStatus(thetameter)[0]['events']
 #pl.plot(thetaEvents['times'], thetaEvents['theta'])
