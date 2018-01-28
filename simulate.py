@@ -6,7 +6,7 @@ import nest.voltage_trace
 import pylab as pl
 
 # simulation parameters
-simtime = 20000.            # simulation time (ms)
+simtime = 2000.            # simulation time (ms)
 dt = 0.1                   # simulation resolution (ms)
 
 nest.ResetKernel()

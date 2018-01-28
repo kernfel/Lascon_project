@@ -96,7 +96,7 @@ cell_params['STN'] = {'model': 'izhikevich', 'params':
 		'b': .265,
 		'c': -65.,
 		'd': 1.5,
-		'I_e': 10. # 20.
+		'I_e': 2. # 20.
 	},
 	'n': 10
 }

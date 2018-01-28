@@ -61,28 +61,28 @@ def create_network(pop, w = 1, wdopa = 150):
 
 	nest.Connect(
 		pop['GPe'], pop['STN'],
-		syn_spec = {'weight': -.04*w, 'delay': 4.0},
+		syn_spec = {'weight': -20.*w, 'delay': 4.0},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 	nest.Connect(
 		pop['Pyr'], pop['STN'],
-		syn_spec = {'weight': .04*w, 'delay': 5.9},
+		syn_spec = {'weight': 10.*w, 'delay': 5.9},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 
 	nest.Connect(
 		pop['GPe'], pop['GPe'],
-		syn_spec = {'weight': -.03*w, 'delay': 0.1},
+		syn_spec = {'weight': -3.*w, 'delay': 0.1},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 	nest.Connect(
 		pop['MSN_D2'], pop['GPe'],
-		syn_spec = {'weight': -.03*w, 'delay': 5.0},
+		syn_spec = {'weight': -3.*w, 'delay': 5.0},
 		conn_spec = {'rule': 'all_to_all'}
 	)
 	nest.Connect(
 		pop['STN'], pop['GPe'][::2],
-		syn_spec = {'weight': .04*w, 'delay': 2.0},
+		syn_spec = {'weight': 5.*w, 'delay': 2.0},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 
