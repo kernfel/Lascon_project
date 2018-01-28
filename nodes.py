@@ -150,6 +150,7 @@ cell_params['Thal'] = {'model': 'izhikevich_psc_alpha', 'params':
 		'b': 15.,
 		'c': -60.,
 		'd': 10.,
+		't_ref': 1.,
 		'I_e': 147. # 0.
 	},
 	'n': 10

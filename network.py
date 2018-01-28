@@ -104,12 +104,12 @@ def create_network(pop, w = 1, wdopa = 150):
 
 	nest.Connect(
 		pop['GPi'], pop['Thal'],
-		syn_spec = {'weight': -0.01*w, 'delay': 5.0},
+		syn_spec = {'weight': -10.*w, 'delay': 5.0},
 		conn_spec = {'rule': 'one_to_one'}
 	)
 	ThalInput = nest.Create('poisson_generator')
-	nest.SetStatus(ThalInput, {'rate': 120.})
-	nest.Connect(ThalInput, pop['Thal'], syn_spec={'weight': 100.})
+	nest.SetStatus(ThalInput, {'rate': 60.})
+	nest.Connect(ThalInput, pop['Thal'], syn_spec={'weight': 150.})
 
 	nest.Connect(
 		pop['SNc'], pop['MSN_D1'],
