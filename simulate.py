@@ -6,7 +6,7 @@ import nest.voltage_trace
 import pylab as pl
 
 # simulation parameters
-simtime = 2000.            # simulation time (ms)
+simtime = 20000.            # simulation time (ms)
 dt = 0.1                   # simulation resolution (ms)
 
 nest.ResetKernel()
@@ -17,7 +17,7 @@ nest.SetKernelStatus({
 
 
 cell_params = nodes.cell_params
-cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
+#cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
 #for pa in cell_params.values():
 #	pa['n'] = 50
 pop = network.create_populations(cell_params)

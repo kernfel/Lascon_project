@@ -35,26 +35,26 @@ def create_network(pop, w = 1, wdopa = 150):
 
 	nest.Connect(
 		pop['Pyr'], pop['MSN_D1'],
-		syn_spec = {'weight': .07*w, 'delay': 5.1, 'receptor_type':
+		syn_spec = {'weight': 13.*w, 'delay': 5.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D1'])[0]['receptor_types']['SPIKESGLU']},
 		conn_spec = {'rule': 'one_to_one'}
 	)
 	nest.Connect(
 		pop['MSN_D1'], pop['MSN_D1'],
-		syn_spec = {'weight': -0.033*w, 'delay': 0.1, 'receptor_type':
+		syn_spec = {'weight': -5.5*w, 'delay': 0.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D1'])[0]['receptor_types']['SPIKESGABA']},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 3, 'autapses': False},
 	)
 
 	nest.Connect(
 		pop['Pyr'], pop['MSN_D2'],
-		syn_spec = {'weight': .07*w, 'delay': 5.1, 'receptor_type':
+		syn_spec = {'weight': 13.*w, 'delay': 5.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D2'])[0]['receptor_types']['SPIKESGLU']},
 		conn_spec = {'rule': 'one_to_one'}
 	)
 	nest.Connect(
 		pop['MSN_D2'], pop['MSN_D2'],
-		syn_spec = {'weight': -0.025*w, 'delay': 0.1, 'receptor_type':
+		syn_spec = {'weight': -5.5*w, 'delay': 0.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D2'])[0]['receptor_types']['SPIKESGABA']},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 3, 'autapses': False}
 	)
