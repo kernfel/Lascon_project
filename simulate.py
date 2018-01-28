@@ -4,6 +4,7 @@ import nodes
 import nest.raster_plot
 import nest.voltage_trace
 import pylab as pl
+from tools import *
 
 # simulation parameters
 simtime = 2000.            # simulation time (ms)
@@ -17,7 +18,7 @@ nest.SetKernelStatus({
 
 
 cell_params = nodes.cell_params
-#cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
+cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
 pop = network.create_populations(cell_params, scale = 1)
 network.create_network(pop)
 
@@ -34,9 +35,9 @@ for key in pop:
 	nest.SetStatus(voltages[key], {'withgid': True, 'withtime': True})
 	nest.Connect(voltages[key], pop[key])
 
-#thetameter = nest.Create('multimeter')
-#nest.SetStatus(thetameter, {'withtime': True, 'record_from': ['theta']})
-#nest.Connect(thetameter, pop['MSN_D1'])
+thetameter = nest.Create('multimeter')
+nest.SetStatus(thetameter, {'withtime': True, 'record_from': ['theta']})
+nest.Connect(thetameter, [pop['MSN_D1'][0]])
 
 
 
@@ -46,22 +47,9 @@ nest.Simulate(simtime)
 #	nest.voltage_trace.from_device(voltages[key])
 #pl.figure()
 
-k = 0;
-for key in pop:
-	k = k+1
-	senders = nest.GetStatus(spikes[key], 'events')[0]['senders'] - pop[key][0]
-	times = nest.GetStatus(spikes[key], 'events')[0]['times']
-	pl.subplot(len(pop), 1, k)
-	pl.scatter(times, senders, marker='.')
-	pl.xlim([0,simtime])
-	pl.ylim([0,len(pop[key])])
-	pl.ylabel(key)
+raster(pop, spikes, simtime)
 
-	rate = nest.GetStatus(spikes[key], 'n_events')[0] / (simtime/1000. * len(pop[key]))
-	print key, rate
-#	if rate > 0 and key in rasters:
-#		nest.raster_plot.from_device(spikes[key], title=key)
-
+#pl.figure()
 #thetaEvents = nest.GetStatus(thetameter)[0]['events']
 #pl.plot(thetaEvents['times'], thetaEvents['theta'])
 
