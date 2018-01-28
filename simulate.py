@@ -18,9 +18,10 @@ nest.SetKernelStatus({
 
 
 cell_params = nodes.cell_params
-cell_params['MSN_D1']['params']['theta'] = cell_params['MSN_D2']['theta'] = 0.8
+cell_params['MSN_D1']['params']['theta'] = 0.8
+cell_params['MSN_D2']['params']['theta'] = 0.8
 pop = network.create_populations(cell_params, scale = 1)
-network.create_network(pop)
+network.create_network(pop, wdopa = 55)
 
 spikes, voltages, thetameter = setup_recordings(pop)
 
