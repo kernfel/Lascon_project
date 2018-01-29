@@ -7,9 +7,9 @@ def create_populations(cell_params, scale = 1):
 	for pop_name in cell_params:
 		p = cell_params[pop_name]
 		populations[pop_name] = nest.Create(p['model'], scale * p['n'], params = p['params'])
-		i_e = nest.GetStatus(populations[pop_name])[0]['I_e']
-		for i in populations[pop_name]:
-			nest.SetStatus([i], {'V_m': uniform(-100., -40.), 'U_m': uniform(0.,1.), 'I_e': i_e + normal()})
+#		i_e = nest.GetStatus(populations[pop_name])[0]['I_e']
+#		for i in populations[pop_name]:
+#			nest.SetStatus([i], {'V_m': uniform(-100., -40.), 'U_m': uniform(0.,1.), 'I_e': i_e + normal()})
 	return populations
 
 def create_network(pop, wdopa = 150):
@@ -77,28 +77,28 @@ def create_network(pop, wdopa = 150):
 	)
 	nest.Connect(
 		pop['MSN_D2'], pop['GPe'],
-		syn_spec = {'weight': -3., 'delay': 5.0},
+		syn_spec = {'weight': -15., 'delay': 5.0},
 		conn_spec = {'rule': 'all_to_all'}
 	)
 	nest.Connect(
 		pop['STN'], pop['GPe'][::2],
-		syn_spec = {'weight': 5., 'delay': 2.0},
+		syn_spec = {'weight': 8., 'delay': 2.0},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 
 	nest.Connect(
 		pop['GPe'], pop['GPi'],
-		syn_spec = {'weight': -5., 'delay': 3.0},
+		syn_spec = {'weight': -15., 'delay': 3.0},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 	nest.Connect(
 		pop['MSN_D1'], pop['GPi'],
-		syn_spec = {'weight': -5., 'delay': 4.0},
+		syn_spec = {'weight': -15., 'delay': 4.0},
 		conn_spec = {'rule': 'all_to_all'}
 	)
 	nest.Connect(
 		pop['STN'], pop['GPi'][::2],
-		syn_spec = {'weight': 15., 'delay': 1.5},
+		syn_spec = {'weight': 8., 'delay': 1.5},
 		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
 	)
 
@@ -107,9 +107,6 @@ def create_network(pop, wdopa = 150):
 		syn_spec = {'weight': -10., 'delay': 5.0},
 		conn_spec = {'rule': 'one_to_one'}
 	)
-	ThalInput = nest.Create('poisson_generator')
-	nest.SetStatus(ThalInput, {'rate': 60.})
-	nest.Connect(ThalInput, pop['Thal'], syn_spec={'weight': 150.})
 
 	nest.Connect(
 		pop['SNc'], pop['MSN_D1'],
