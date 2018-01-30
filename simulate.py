@@ -21,7 +21,8 @@ cell_params = nodes.cell_params
 cell_params['MSN_D1']['params']['theta'] = 0.8
 cell_params['MSN_D2']['params']['theta'] = 0.8
 pop = network.create_populations(cell_params, scale = 1)
-network.create_network(pop, wdopa = 55)
+network.create_network(pop)
+network.connect_SNc(pop, frac = 1, weight = 1.5, outdeg = 0.6)
 
 spikes, voltages, thetameter = setup_recordings(pop)
 
@@ -31,7 +32,7 @@ nest.Simulate(simtime)
 
 plot_raster(pop, spikes, simtime)
 
-#pl.figure()
-#plot_theta(pop, thetameter)
+pl.figure()
+plot_theta(pop, thetameter)
 
 pl.show()

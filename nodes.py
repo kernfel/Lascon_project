@@ -14,7 +14,7 @@ cell_params['SNc'] = {'model': 'izhikevich', 'params':
 		'd': 50.,
 		'V_th': 10.
 	},
-	'n': 10
+	'n': 100
 }
 
 cell_params['MSN_D1'] = {'model': 'izhikevich_dopa_modulated', 'params':

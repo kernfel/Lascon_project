@@ -1,5 +1,5 @@
 import nest
-from numpy.random import uniform, normal
+from numpy.random import uniform, normal, choice
 
 def create_populations(cell_params, scale = 1):
 	nest.Install('models')
@@ -12,7 +12,7 @@ def create_populations(cell_params, scale = 1):
 #			nest.SetStatus([i], {'V_m': uniform(-100., -40.), 'U_m': uniform(0.,1.), 'I_e': i_e + normal()})
 	return populations
 
-def create_network(pop, wdopa = 150):
+def create_network(pop):
 	nest.Connect(
 		pop['Thal'], pop['Pyr'],
 		syn_spec = {'weight': 5., 'delay': 5.6},
@@ -108,17 +108,27 @@ def create_network(pop, wdopa = 150):
 		conn_spec = {'rule': 'one_to_one'}
 	)
 
+def connect_SNc(pop, frac = 1., weight = 12, outdeg = 0.6):
+	if frac >= 1.:
+		# Use the whole population
+		sn = pop['SNc']
+	else:
+		# Pick a fractional part of the population
+		n = int(round(len(pop['SNc']) * frac))
+		idx = choice(len(pop['SNc']), n, replace=False)
+		sn = [pop['SNc'][i] for i in idx]
+	
 	nest.Connect(
-		pop['SNc'], pop['MSN_D1'],
-		syn_spec = {'weight': 100.0*wdopa, 'delay': 3.0, 'receptor_type':
+		sn, pop['MSN_D1'],
+		syn_spec = {'weight': 100.0 * weight, 'delay': 3.0, 'receptor_type':
 			nest.GetStatus(pop['MSN_D1'])[0]['receptor_types']['SPIKESDOPA']},
-		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
+		conn_spec = {'rule': 'fixed_outdegree', 'outdegree': int(round(outdeg*len(pop['MSN_D1'])))}
 	)
 	nest.Connect(
-		pop['SNc'], pop['MSN_D2'],
-		syn_spec = {'weight': 100.0*wdopa, 'delay': 3.0, 'receptor_type':
+		sn, pop['MSN_D2'],
+		syn_spec = {'weight': 100.0 * weight, 'delay': 3.0, 'receptor_type':
 			nest.GetStatus(pop['MSN_D2'])[0]['receptor_types']['SPIKESDOPA']},
-		conn_spec = {'rule': 'fixed_indegree', 'indegree': 2}
+		conn_spec = {'rule': 'fixed_outdegree', 'outdegree': int(round(outdeg*len(pop['MSN_D2'])))}
 	)
 
 
