@@ -36,7 +36,7 @@ cell_params['MSN_D1'] = {'model': 'izhikevich_dopa_modulated', 'params':
 		"beta1" :      0.5,
 		#"beta2" :      0.3,
 
-		'I_e': 230., # tuned
+		#'I_e': 230., # tuned
 
 		# Values from Kumaravelu:
 		"V_gaba" : -80.,
@@ -76,7 +76,7 @@ cell_params['MSN_D2'] = {'model': 'izhikevich_dopa_modulated', 'params':
 		#"beta1" :      0.5,
 		"beta2" :      0.3,
 
-		'I_e': 230., # tuned
+		#'I_e': 230., # tuned
 
 		# Values from Kumaravelu:
 		"V_gaba" : -80.,

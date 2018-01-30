@@ -24,6 +24,9 @@ pop = network.create_populations(cell_params, scale = 1)
 network.create_network(pop)
 network.connect_SNc(pop, frac = 1, weight = 1.5, outdeg = 0.6)
 
+stim_times = [(10000,15000)]
+network.add_stims(pop['SNc'], stim_times, rate = 100, weight = 20)
+
 spikes, voltages, thetameter = setup_recordings(pop)
 
 

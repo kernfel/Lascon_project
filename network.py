@@ -35,7 +35,7 @@ def create_network(pop):
 
 	nest.Connect(
 		pop['Pyr'], pop['MSN_D1'],
-		syn_spec = {'weight': 15., 'delay': 5.1, 'receptor_type':
+		syn_spec = {'weight': 43., 'delay': 5.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D1'])[0]['receptor_types']['SPIKESGLU']},
 		conn_spec = {'rule': 'one_to_one'}
 	)
@@ -48,7 +48,7 @@ def create_network(pop):
 
 	nest.Connect(
 		pop['Pyr'], pop['MSN_D2'],
-		syn_spec = {'weight': 11., 'delay': 5.1, 'receptor_type':
+		syn_spec = {'weight': 43., 'delay': 5.1, 'receptor_type':
 			nest.GetStatus(pop['MSN_D2'])[0]['receptor_types']['SPIKESGLU']},
 		conn_spec = {'rule': 'one_to_one'}
 	)
@@ -104,7 +104,7 @@ def create_network(pop):
 
 	nest.Connect(
 		pop['GPi'], pop['Thal'],
-		syn_spec = {'weight': -15., 'delay': 5.0},
+		syn_spec = {'weight': -25., 'delay': 5.0},
 		conn_spec = {'rule': 'one_to_one'}
 	)
 
@@ -130,6 +130,14 @@ def connect_SNc(pop, frac = 1., weight = 12, outdeg = 0.6):
 			nest.GetStatus(pop['MSN_D2'])[0]['receptor_types']['SPIKESDOPA']},
 		conn_spec = {'rule': 'fixed_outdegree', 'outdegree': int(round(outdeg*len(pop['MSN_D2'])))}
 	)
+
+def add_stims(pop, times, rate = 100, weight = 20):
+	''' Creates a poisson input for each (tStart, tEnd) in times and connects it to the given population. '''
+	syn = {'weight': float(weight)}
+	for start, stop in times:
+		stim = nest.Create('poisson_generator')
+		nest.SetStatus(stim, {'start': float(start), 'stop': float(stop), 'rate': float(rate)})
+		nest.Connect(stim, pop, syn_spec = syn)
 
 
 if __name__ == '__main__':
