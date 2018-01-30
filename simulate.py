@@ -7,7 +7,7 @@ import pylab as pl
 from tools import *
 
 # simulation parameters
-simtime = 2000.            # simulation time (ms)
+simtime = 20000.            # simulation time (ms)
 dt = 0.1                   # simulation resolution (ms)
 
 nest.ResetKernel()
@@ -29,9 +29,9 @@ spikes, voltages, thetameter = setup_recordings(pop)
 
 nest.Simulate(simtime)
 
-#plot_raster(pop, spikes, simtime)
+plot_raster(pop, spikes, simtime)
 
-pl.figure()
-plot_theta(pop, thetameter)
+#pl.figure()
+#plot_theta(pop, thetameter)
 
 pl.show()
