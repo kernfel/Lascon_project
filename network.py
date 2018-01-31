@@ -2,7 +2,6 @@ import nest
 from numpy.random import uniform, normal, choice
 
 def create_populations(cell_params, scale = 1):
-	nest.Install('models')
 	populations = {}
 	for pop_name in cell_params:
 		p = cell_params[pop_name]
