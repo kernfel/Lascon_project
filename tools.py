@@ -14,6 +14,12 @@ def plot_raster(pop, spikes, simtime, showRate=True):
 		pl.xlim([0,simtime])
 		pl.ylim([0,len(pop[key])])
 		pl.ylabel(key)
+		pl.yticks([])
+
+		if k < len(pop):		
+			pl.xticks([])
+		else:
+			pl.xlabel('Time (ms)')
 
 		rates[key] = nest.GetStatus(spikes[key], 'n_events')[0] / (simtime/1000. * len(pop[key]))
 		if showRate:
@@ -33,6 +39,8 @@ def plot_theta(pop, thetameter):
 	pl.plot(time.T[-1].T, theta.T[-1].T, 'r', label='D2')
 	pl.plot(time.T[nD1:-1].T, theta.T[nD1:-1].T, 'r')
 	pl.legend()
+	pl.ylabel('theta')
+	pl.xlabel('Time (ms)')
 
 def setup_recordings(pop):
 	spikes = {}
@@ -53,3 +61,16 @@ def setup_recordings(pop):
 	nest.Connect(thetameter, pop['MSN_D1'] + pop['MSN_D2'])
 
 	return spikes, voltages, thetameter
+
+def plot_rate_bars(rates, titles, colours):
+	nGroups, nBars = len(rates), len(rates[0])
+	k = 0
+	w = 1. / (nGroups+1)
+	rects = []
+	ind = np.arange(nBars)
+	for ratedict in rates:
+		rects.append( pl.bar(ind + w*k, ratedict.values(), w, color = colours[k]) )
+		k += 1
+	pl.legend(rects, titles)
+	pl.xticks(ind + w*(nGroups-1)/2., rates[0].keys())
+	pl.ylabel('Spike rate (Hz)')

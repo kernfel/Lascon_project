@@ -47,5 +47,10 @@ if __name__ == '__main__':
 	rates_healthy = SNc_experiment(1, 0.8, title = 'Healthy')
 	rates_untreated = SNc_experiment(0.1, 0.2, title = 'untreated PD')
 	rates_ldopa = SNc_experiment(0.1, 0.3, weight = 6., title = 'PD + levodopa')
-	
+
+	pl.figure()
+	plot_rate_bars(
+		(rates_healthy, rates_untreated, rates_ldopa),
+		('healthy', 'untreated PD', 'PD + levodopa'),
+		('g',       'r',            'b'))
 	pl.show()
