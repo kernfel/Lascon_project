@@ -132,13 +132,12 @@ def connect_SNc(pop, frac = 1., weight = 12, outdeg = 0.6):
 		conn_spec = {'rule': 'fixed_outdegree', 'outdegree': int(round(outdeg*len(pop['MSN_D2'])))}
 	)
 
-def add_stims(pop, times, rate = 100, weight = 20):
+def add_stims(pop, times, amp = 100):
 	''' Creates a poisson input for each (tStart, tEnd) in times and connects it to the given population. '''
-	syn = {'weight': float(weight)}
 	for start, stop in times:
-		stim = nest.Create('poisson_generator')
-		nest.SetStatus(stim, {'start': float(start), 'stop': float(stop), 'rate': float(rate)})
-		nest.Connect(stim, pop, syn_spec = syn)
+		stim = nest.Create('dc_generator')
+		nest.SetStatus(stim, {'start': float(start), 'stop': float(stop), 'amplitude': float(amp)})
+		nest.Connect(stim, pop)
 
 
 if __name__ == '__main__':
