@@ -1,11 +1,12 @@
 import pylab as pl
 import nest
 import numpy as np
+from nodes import cell_order as order
 
 def plot_raster(pop, spikes, simtime, showRate=True):
 	k = 0;
 	rates = {}
-	for key in pop:
+	for key in order:
 		k = k+1
 		senders = nest.GetStatus(spikes[key], 'events')[0]['senders'] - pop[key][0]
 		times = nest.GetStatus(spikes[key], 'events')[0]['times']
@@ -69,8 +70,9 @@ def plot_rate_bars(rates, titles, colours):
 	rects = []
 	ind = np.arange(nBars)
 	for ratedict in rates:
-		rects.append( pl.bar(ind + w*k, ratedict.values(), w, color = colours[k]) )
+		values = [ratedict[key] for key in order]
+		rects.append( pl.bar(ind + w*k, values, w, color = colours[k]) )
 		k += 1
 	pl.legend(rects, titles)
-	pl.xticks(ind + w*(nGroups-1)/2., rates[0].keys())
+	pl.xticks(ind + w*(nGroups-1)/2., order)
 	pl.ylabel('Spike rate (Hz)')

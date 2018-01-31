@@ -1,6 +1,7 @@
 ''' Neuron model parameters '''
 
 cell_params = {}
+cell_order = ['Pyr', 'Inh', 'MSN_D1', 'MSN_D2', 'STN', 'GPe', 'GPi', 'Thal', 'SNc']
 
 tau_in = 5.
 tau_ex = 2.
