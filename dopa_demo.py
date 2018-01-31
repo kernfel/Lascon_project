@@ -65,12 +65,15 @@ V_m = np.reshape(events["V_m"], meter_shape)
 pl.subplot(3,1,1)
 pl.plot(times, V_m.T[0], 'g')
 pl.ylabel('V_m')
+ticks, lbl = pl.xticks()
+pl.xticks(ticks, [])
 
 pl.subplot(3,1,2)
 pl.plot(times, V_m.T[1], 'r')
 pl.hlines(max(V_m.T[1]), 0, times[-1], linestyles='dashed')
 pl.ylim([-80.1, -79.2])
 pl.ylabel('V_m')
+pl.xticks(ticks, [])
 
 ax1 = pl.subplot(3,1,3)
 pl.xlabel('Time (ms)')
@@ -92,6 +95,11 @@ for i in 1, 2:
 	V0 = V_m.T[i-1][tObs[0]]
 	for t in tObs:
 		pl.plot(times[t:t+40] - t, V_m.T[i-1][t:t+40] - (V_m.T[i-1][t] - V0), label = '%d ms' % t)
+
+	ticks, lbl = pl.xticks()
+	if i == 1:
+		pl.xticks(ticks, [])
+
 pl.xlabel('Time (ms)')
 pl.legend()
 
