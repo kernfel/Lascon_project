@@ -39,7 +39,7 @@ def plot_theta(pop, thetameter):
 	pl.plot(time.T[1:nD1].T, theta.T[1:nD1].T, 'b')
 	pl.plot(time.T[-1].T, theta.T[-1].T, 'r', label='D2')
 	pl.plot(time.T[nD1:-1].T, theta.T[nD1:-1].T, 'r')
-	pl.legend()
+	pl.legend(loc = 'upper left')
 	pl.ylabel('theta')
 	pl.xlabel('Time (ms)')
 
