@@ -9,7 +9,7 @@ function [] = simulate_network_model(IT,pd,corstim,pick_dbs_freq)
 pkg load statistics % required for randsample, randperm
 
 n = 10;             % number of neurons in each nucleus
-tmax = 2000;       % ms
+tmax = 10000;       % ms
 dt = 0.01;          % ms
 t=0:dt:tmax;
 
@@ -49,7 +49,8 @@ end
 % Run CTX-BG-TH Network Model
 [TH_APs STN_APs GPe_APs GPi_APs Striat_APs_indr Striat_APs_dr Cor_APs] = CTX_BG_TH_network(pd,corstim,tmax,dt,n,Idbs,Iappco);
 
-save 'simulate_network_model.mat'
+fname = ['simulate_network_model_' num2str(pd) '.mat'];
+save fname
 
 % Calculate GPi pathological low-frequency oscillatory power
 dt1=0.01*10^-3;
@@ -68,7 +69,7 @@ params.trialave = 1;
  % name = [num2str(IT) 'pd' num2str(pattern) '.mat'];
  % eval(['save ' name])
 
-quit
+% quit
 
 end
 
@@ -807,7 +808,9 @@ end
     z1bdot=uci-2/tau*Z1b-1/(tau^2)*S1b;
     Z1b=Z1b+dt*z1bdot;
 
-disp (i-1); fflush(stdout);
+if mod(i,10) == 0
+  disp ([pd i]); fflush(stdout);
+end
     end
 
     
